@@ -16,36 +16,39 @@ class OrdersController < ApplicationController
     if @current_cart.cart_items.empty?
       render json: { message: "Your cart is empty" }
     else
-      # Create a new order
-      @order = Order.new(order_params)
+      begin
+        # Create a new order
+        @order = Order.new(order_params)
   
-      # Wrap the order creation, cart item addition, and payment processing in a transaction
-      ActiveRecord::Base.transaction do
-        # Add cart items to the order
-        add_cart_items_to_order
+        # Wrap the order creation, cart item addition, and payment processing in a transaction
+        ActiveRecord::Base.transaction do
+          # Add cart items to the order
+          add_cart_items_to_order
   
-        # Charge the payment using Stripe
-        charge = Stripe::Charge.create(
-          amount: calculate_order_amount,  # Specify the order amount in cents
-          currency: 'inr',
-          source: params[:stripeToken]  # Use the Stripe token received from the client-side
-        )
+          # Charge the payment using Stripe
+          charge = Stripe::Charge.create(
+            amount: calculate_order_amount,  # Specify the order amount in cents
+            currency: 'inr',
+            source: params[:stripeToken]  # Use the Stripe token received from the client-side
+          )
   
-        # Save the order and update the payment details
-        @order.payment_id = charge.id
-        @order.payment_status = charge.status
+          # Save the order and update the payment details
+          @order.payment_id = charge.id
+          @order.payment_status = charge.status
   
-        if @order.save
-          render json: @order
-        else
-          raise ActiveRecord::Rollback  # Rollback the transaction if order saving fails
-          render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
+          if @order.save
+            render json: @order
+          else
+            raise ActiveRecord::Rollback  # Rollback the transaction if order saving fails
+            render json: { errors: @order.errors.full_messages }, status: :unprocessable_entity
+          end
         end
+      rescue Stripe::CardError => e
+        render json: { errors: e.message }, status: :unprocessable_entity
       end
-    rescue Stripe::CardError => e
-      render json: { errors: e.message }, status: :unprocessable_entity
     end
   end
+  
   
 
   def destroy
