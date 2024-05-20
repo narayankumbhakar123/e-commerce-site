@@ -1,5 +1,4 @@
 class CategoriesController < ApplicationController
-  # skip_before_action :authenticate_request, only: [:create]
     before_action :set_category, only: %i[ show edit update destroy ]
 
     def index
