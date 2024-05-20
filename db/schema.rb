@@ -11,13 +11,16 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2024_02_06_163028) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
     t.string "resource_type"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.string "author_type"
-    t.integer "author_id"
+    t.bigint "author_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
@@ -75,7 +78,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_06_163028) do
   end
 
   create_table "carts", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_carts_on_user_id"
@@ -88,8 +91,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_06_163028) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "status"
+    t.bigint "user_id", null: false
+    t.integer "status", default: 0
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -99,7 +102,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_06_163028) do
   end
 
   create_table "payments", force: :cascade do |t|
-    t.integer "order_id", null: false
+    t.bigint "order_id", null: false
     t.string "transaction_id"
     t.integer "status"
     t.datetime "created_at", null: false
@@ -108,7 +111,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_06_163028) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.integer "category_id", null: false
+    t.bigint "category_id", null: false
     t.string "name"
     t.string "url"
     t.string "manufacturer"
