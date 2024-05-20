@@ -25,4 +25,4 @@ production:
   database: my_app_production_pq6k
   username: my_app_production_pq6k_user
   password: qhQs3y1EYv4pFsaDxaWMgRCezdgJHFCz
-  host: 5432
+  port: 5432
