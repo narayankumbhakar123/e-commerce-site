@@ -24,7 +24,8 @@ test:
 
 production:
   <<: *default
-  database: my_app_production
-  username: my_app_production_pq6k_user
-  password: qhQs3y1EYv4pFsaDxaWMgRCezdgJHFCz
+  database: e_app_production
+  username: narayan
+  password: mgOf0odofkZ2p7XPpx83nsk2CIBrRbRW
+  hostname: dpg-cp65o2o21fec738bonu0-a
   port: 5432
