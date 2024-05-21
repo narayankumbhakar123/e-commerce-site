@@ -24,7 +24,7 @@ test:
 
 production:
   <<: *default
-  database: my_app_production_pq6k
+  database: my_app_production
   username: my_app_production_pq6k_user
   password: qhQs3y1EYv4pFsaDxaWMgRCezdgJHFCz
   port: 5432
